@@ -31,7 +31,6 @@
           <v-btn color="success" @click="submitRequest()" :disabled="!valid">
             Shorten
           </v-btn>
-          <p><a href="https://localhost:8080">Google</a></p>
           <p v-if="shortUrl">Your short Url: <a :href="shortUrl">{{ shortUrl }}</a></p>
           <v-alert
             v-if="errMessage"
@@ -45,7 +44,6 @@
             {{ errMessage }}
           </v-alert>
         </v-form>
-
       </v-col>
     </v-row>
   </div>
@@ -87,7 +85,7 @@ export default {
           }),
         });
         if (response.ok) {
-          this.shortUrl = this.addhttpToUrl(`${window.location.host}/api/url/${this.slug}`);
+          this.shortUrl = this.addhttpToUrl(`${window.location.host}/${this.slug}`);
         } else {
           this.errMessage = await response.text();
         }
@@ -96,9 +94,8 @@ export default {
       }
     },
     addhttpToUrl(url) {
-      const prefix = 'http://';
-      if (url.substr(0, prefix.length) !== prefix) {
-        return prefix + url;
+      if (!/^https?:\/\//i.test(url)) {
+        return `http://${url}`;
       }
       return url;
     },

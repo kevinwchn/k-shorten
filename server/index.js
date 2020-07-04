@@ -18,13 +18,20 @@ app.use(morgan('tiny'));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
+
+let addhttpToUrl = (url) => {
+  if (!/^https?:\/\//i.test(url)) {
+    return 'http://' + url;
+  }
+  return url;
+};
  
-app.get('/api/url/:slug', async (req, res) => {
+app.get('/:slug', async (req, res) => {
   let err;
   try {
     const urlResult = await urls.findOne({ slug: req.params.slug })
     if (urlResult) {
-      res.redirect(urlResult.url);
+      res.redirect(addhttpToUrl(urlResult.url));
       return;
     } else {
       err = new Error(`Cannot find slug`);
