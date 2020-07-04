@@ -2,16 +2,63 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
- 
+const monk = require('monk')
+
+require('dotenv').config()
+
+const url = process.env.MONGODB_URI;
+
+const db = monk(url);
+const urls = db.get('urls')
+urls.createIndex('slug',  { unique:true })
+
 const app = express();
- 
+
 app.use(morgan('tiny'));
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }))
  
-app.get('/api', (req, res) => {
+app.get('/api/url/:slug', async (req, res) => {
+  let err;
+  try {
+    const urlResult = await urls.findOne({ slug: req.params.slug })
+    if (urlResult) {
+      res.redirect(urlResult.url);
+      return;
+    } else {
+      err = new Error(`Cannot find slug`);
+      err.statusCode = 400;
+    }
+  } catch (mongoError) {
+    err = new Error(`Unknown error`);
+    err.statusCode = 500;
+  }
+  res.status(err.statusCode).send(err.message);
+});
+
+app.post('/api/url', async (req, res) => {
+  const url = req.body.url;
+  const slug = req.body.slug;
+
+  try {
+    await urls.insert({ url: url, slug: slug });
+  } catch (mongoError) {
+    let err;
+    if (mongoError.message.startsWith('E11000')) {
+      err = new Error(`Slug in use`);
+      err.statusCode = 400;
+      res.status(err.statusCode).send(err.message);
+    } else {
+      err = new Error(`Unknown error`);
+      err.statusCode = 500;
+    }
+    res.status(err.statusCode).send(err.message);
+  }
+
   res.json({
-    message: 'I\'m the response!'
+    url: url,
+    slug: slug
   });
 });
 
