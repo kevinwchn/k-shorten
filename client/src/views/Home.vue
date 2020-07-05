@@ -2,7 +2,7 @@
   <div class="home">
     <v-row>
       <v-col>
-        <h1>Shorten your URL</h1>
+        <h1 class="title">Shorten your URL</h1>
       </v-col>
     </v-row>
     <v-row no-gutters class="pt-3">
