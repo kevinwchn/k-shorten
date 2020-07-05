@@ -2,7 +2,7 @@
   <div class="home">
     <v-row>
       <v-col>
-        <h1 class="title">Shorten your URL</h1>
+        <p class="header">Shorten your URL</p>
       </v-col>
     </v-row>
     <v-row no-gutters class="pt-3">
@@ -50,9 +50,16 @@
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Walter+Turncoat&display=swap');
+
 .home {
   text-align: center;
   padding: 30px;
+}
+
+.header {
+  font-family: 'Walter Turncoat', cursive;
+  font-size: 32px;
 }
 </style>
 
