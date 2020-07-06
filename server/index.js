@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const monk = require('monk')
+const helmet = require('helmet')
 
 require('dotenv').config()
 
@@ -14,6 +15,7 @@ urls.createIndex('slug',  { unique:true })
 
 const app = express();
 
+app.use(helmet());
 app.use(morgan('tiny'));
 app.use(cors());
 app.use(bodyParser.json());
