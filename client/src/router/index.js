@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
+import Kenan from '../views/Kenan.vue';
 
 Vue.use(VueRouter);
 
@@ -11,6 +12,14 @@ const routes = [
     component: Home,
     meta: {
       title: 'Shorten URL',
+    },
+  },
+  {
+    path: '/k',
+    name: 'Kenan',
+    component: Kenan,
+    meta: {
+      title: '柯南-多瑙',
     },
   },
 ];

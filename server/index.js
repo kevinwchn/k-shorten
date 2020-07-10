@@ -34,6 +34,10 @@ let addhttpToUrl = (url) => {
   }
   return url;
 };
+
+app.get('/k', async (req, res, next) => {
+  res.sendFile(__dirname + '/public/index.html');
+});
  
 app.get('/:slug', async (req, res, next) => {
   let err;
@@ -53,13 +57,14 @@ app.get('/:slug', async (req, res, next) => {
   next(err);
 });
 
-app.get('/k/:id', async (req, res, next) => {
+app.get('/api/kenan/:id', async (req, res, next) => {
   const id = req.params.id;
-  // res.json({
-  //   id: id,
-  //   ifvodId: kenanIds[id - 1]
-  // });
-  res.redirect('https://www.ifvod.tv/play?id=' + kenanIds[id - 1]);
+  res.json({
+    id: id,
+    ifvodId: kenanIds[id - 1],
+    url: 'https://classic.ifvod.tv/play?id=' + kenanIds[id - 1],
+  });
+  // res.redirect('https://classic.ifvod.tv/play?id=' + kenanIds[id - 1]);
 });
 
 app.post('/api/url', async (req, res, next) => {
